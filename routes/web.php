@@ -34,6 +34,7 @@ Route::prefix('/')->group(function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/wellcome', [DashboardController::class, 'index'])->name('index.wellcome');
+        Route::get('/list-jobs', [DashboardController::class, 'listJob'])->name('list.job');
     });
 });
 

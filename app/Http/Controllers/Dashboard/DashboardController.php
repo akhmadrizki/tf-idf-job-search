@@ -16,4 +16,9 @@ class DashboardController extends Controller
     {
         return view('interfaces.dashboard.index');
     }
+
+    public function listJob()
+    {
+        return view('interfaces.dashboard.listJob');
+    }
 }
