@@ -60,7 +60,8 @@
               <div class="text-center text-muted mb-4">
                 <small>login. email: <b>admin@alihgae.com</b> password: <b>password</b></small>
               </div>
-              <form method="POST" action="{{ route('login') }}" role="form">
+              <form method="POST" action="{{ route('login') }}">
+                @csrf
                 <div class="form-group mb-3">
                   <div class="input-group input-group-merge input-group-alternative">
                     <div class="input-group-prepend">

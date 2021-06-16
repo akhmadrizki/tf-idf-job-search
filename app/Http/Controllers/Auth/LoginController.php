@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected $redirectTo = '/dashboard/wellcome';
 
     /**
      * Create a new controller instance.
@@ -41,8 +41,8 @@ class LoginController extends Controller
     public function index()
     {
         if (Auth::check()) {
-            return redirect()->to('/dashboard');
+            return redirect()->to('/dashboard/wellcome');
         }
-        return view('layouts.auth');
+        return view('layouts.login');
     }
 }
