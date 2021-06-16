@@ -25,3 +25,9 @@ then
 ```sh
 $ sail up -d
 ```
+
+- Run this command:
+```sh
+$ sail composer dump-autoload
+$ php artisan migrate:fresh --seed
+```
