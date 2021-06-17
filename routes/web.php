@@ -35,6 +35,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/wellcome', [DashboardController::class, 'index'])->name('index.wellcome');
         Route::get('/list-jobs', [DashboardController::class, 'listJob'])->name('list.job');
+        Route::get('/add-job', [DashboardController::class, 'addJob'])->name('add.job');
+        Route::post('/add-job', [DashboardController::class, 'storeJob']);
+        Route::delete('/list-jobs-{id}', [DashboardController::class, 'destroy'])->name('delete.job');
+
+        Route::get('/edit-job-{id}', [DashboardController::class, 'editJob'])->name('edit.job');
+        Route::post('/update-job-{id}', [DashboardController::class, 'updateJob'])->name('update.job');
     });
 });
 
