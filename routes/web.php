@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LandingController::class, 'index'])->name('index.landing');
+Route::get('/result', [LandingController::class, 'results'])->name('index.result');
 
 // Login Admin
 Route::get('/admin', [LoginController::class, 'index'])->name('admin');

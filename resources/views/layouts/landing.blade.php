@@ -14,20 +14,11 @@
     integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
   <title>Alihgae</title>
-  <style>
-    .landing {
-      height: 100vh;
-    }
-  </style>
   @yield('additional-css')
 </head>
 
 <body>
-  <div class="landing d-flex">
-    <div class="container d-flex justify-content-center align-items-center">
-      @yield('content')
-    </div>
-  </div>
+  @yield('content')
   <!-- Optional JavaScript; choose one of the two! -->
 
   <!-- Option 1: Bootstrap Bundle with Popper -->
