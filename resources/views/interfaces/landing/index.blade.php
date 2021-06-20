@@ -34,9 +34,10 @@
     <div class="row">
       <div class="col-12 d-flex align-items-center flex-column">
         <img src="{{ asset('argon/img/brand/alihgae-logo.png') }}" alt="alihgae-logo" class="logo pb-2">
-        <form action="">
+        <form action="{{ route('index.result') }}" method="POST">
+          @csrf
           <div class="input-group search-custom">
-            <input type="text" class="form-control input-custom" placeholder="Search and find the job you want"
+            <input type="text" name="search" class="form-control input-custom" placeholder="Search and find the job you want"
               autofocus>
             <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
                 class="fas fa-search"></i></button>

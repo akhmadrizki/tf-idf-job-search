@@ -11,9 +11,14 @@
 ```sh
 $ git clone https://github.com/akhmadrizki/tf-idf-job-search.git
 ```
-2. Install all package
+2. Install all package (Make sure Docker integrated to WSL2 if you're in windows, please check: https://docs.docker.com/docker-for-windows/wsl/#install)
 ```sh
-$ composer install
+$ docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/opt \
+    -w /opt \
+    laravelsail/php80-composer:latest \
+    composer install --ignore-platform-reqs
 ```
 
 ## Running the app

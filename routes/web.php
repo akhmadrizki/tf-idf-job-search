@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Landing\LandingController;
 use Illuminate\Support\Facades\Route;
+use App\Helpers\Stopwords;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [LandingController::class, 'index'])->name('index.landing');
-Route::get('/result', [LandingController::class, 'results'])->name('index.result');
+Route::post('/result', [LandingController::class, 'results'])->name('index.result');
 
 // Login Admin
 Route::get('/admin', [LoginController::class, 'index'])->name('admin');
