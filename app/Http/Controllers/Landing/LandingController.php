@@ -128,10 +128,7 @@ class LandingController extends Controller
         foreach($queryTerms as $queryIndex => $queryTerm){
             foreach($jobsTerms as $jobIndex => $jobTerms){
                 foreach($jobTerms['terms'] as $jobTerm){
-                    if($jobTerm === $queryTerm)
-                    {
-                        $DFCount[$queryIndex] = 0;
-                    }
+                    $DFCount[$queryIndex] = 0;
                 }
             }
         }
@@ -164,7 +161,8 @@ class LandingController extends Controller
         //hitung
         foreach($DFCount as $index => $count)
         {
-            $IDFCount[$index] = log($jobsCount/$count);
+            if($count > 0)
+                $IDFCount[$index] = log($jobsCount/$count);
         }
 
         return $IDFCount;
