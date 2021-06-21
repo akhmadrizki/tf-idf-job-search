@@ -10,6 +10,9 @@ class Stemming {
         $stemmerFactory = new \Sastrawi\Stemmer\StemmerFactory();
         $stemmer  = $stemmerFactory->createStemmer();
 
-        return $stemmer->stem($word);
+        //stemming english words first
+        $stemmed = \Nadar\Stemming\Stemm::stem($word, 'en');
+
+        return $stemmer->stem($stemmed);
     }
 }

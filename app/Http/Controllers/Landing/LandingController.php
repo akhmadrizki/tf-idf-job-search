@@ -44,10 +44,23 @@ class LandingController extends Controller
             $address = self::preprocessing($job->address);
 
             //combine into one result for each job
-            $jobsTerms[] = array_merge($companyName, $jobName, $category, $description, $address);
+            $jobsTerms[] = [
+                'job_id' => $job->id,
+                'terms' => array_merge($companyName, $jobName, $category, $description, $address)
+            ];
         }
 
-        dd($jobsTerms);
+        //count TF
+        $TFCount = self::countTF($queryTerms, $jobsTerms);
+
+        //count DF
+        $DFCount = self::countDF($queryTerms, $jobsTerms);
+
+        //count IDF
+        $IDFCount = self::countIDF(count($jobs), $DFCount);
+        
+        $TFIDFCount = self::countTFIDF($TFCount, $IDFCount);
+        dd($TFIDFCount);
         
         // return view('interfaces.landing.result')
         //     ->withJobs($jobs);
@@ -75,5 +88,115 @@ class LandingController extends Controller
         }
         
         return $preprocessedWord;
+    }
+
+    protected static function countTF($queryTerms, $jobsTerms)
+    {
+        $TFCount = array();
+
+        //definisikan array
+        foreach($queryTerms as $queryIndex => $queryTerm){
+            foreach($jobsTerms as $jobIndex => $jobTerms){
+                foreach($jobTerms['terms'] as $jobTerm){
+                    $TFCount[$queryIndex][$jobIndex]['job_id'] = $jobTerms['job_id'];
+                    $TFCount[$queryIndex][$jobIndex]['count'] = 0;
+                }
+            }
+        }
+
+        //lakukan pengecekan
+        foreach($queryTerms as $queryIndex => $queryTerm){
+            foreach($jobsTerms as $jobIndex => $jobTerms){
+                foreach($jobTerms['terms'] as $jobTerm){
+                    if($jobTerm === $queryTerm)
+                    {
+                        $TFCount[$queryIndex][$jobIndex]['count'] += 1;
+                    }
+                }
+            }
+        }
+
+
+        return $TFCount;
+    }
+
+    protected static function countDF($queryTerms, $jobsTerms)
+    {
+        $DFCount = array();
+
+        //inisialisasi array
+        foreach($queryTerms as $queryIndex => $queryTerm){
+            foreach($jobsTerms as $jobIndex => $jobTerms){
+                foreach($jobTerms['terms'] as $jobTerm){
+                    if($jobTerm === $queryTerm)
+                    {
+                        $DFCount[$queryIndex] = 0;
+                    }
+                }
+            }
+        }
+
+        //pengecekan
+        foreach($queryTerms as $queryIndex => $queryTerm){
+            foreach($jobsTerms as $jobIndex => $jobTerms){
+                foreach($jobTerms['terms'] as $jobTerm){
+                    if($jobTerm === $queryTerm)
+                    {
+                        $DFCount[$queryIndex] += 1;
+                    }
+                }
+            }
+        }
+
+        return $DFCount;
+    }
+
+    protected static function countIDF($jobsCount, $DFCount)
+    {
+        $IDFCount = array();
+
+        //inisiasi
+        foreach($DFCount as $index => $count)
+        {
+            $IDFCount[$index] = 0;
+        }
+
+        //hitung
+        foreach($DFCount as $index => $count)
+        {
+            $IDFCount[$index] = log($jobsCount/$count);
+        }
+
+        return $IDFCount;
+    }
+
+    protected static function countTFIDF($TFCount, $IDFCount)
+    {
+        $TFIDFCount = array();
+
+        //inisiasi
+        foreach($TFCount as $index => $TFJobs)
+        {       
+            foreach($TFJobs as $jobIndex => $TFJob)
+            {
+                $TFIDFCount[$index][$jobIndex] = [
+                    'job_id' => $TFJob['job_id'],
+                    'tf_count' => $TFJob['count'],
+                    'bobot (TF-IDF)' => 0
+                ];
+            }
+        }
+
+
+        //hitung
+        foreach($TFCount as $index => $TFJobs)
+        {       
+            foreach($TFJobs as $jobIndex => $TFJob)
+            {
+                $TFIDFCount[$index][$jobIndex]['bobot (TF-IDF)'] = $TFIDFCount[$index][$jobIndex]['tf_count'] * $IDFCount[$index];
+            }
+        }
+
+        return $TFIDFCount;
     }
 }

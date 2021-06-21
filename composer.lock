@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12c37c36194d72cf05db84c8da318b69",
+    "content-hash": "2a93f54ec26618d61e21fe7c7fec1447",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1497,6 +1497,53 @@
                 }
             ],
             "time": "2020-12-14T13:15:25+00:00"
+        },
+        {
+            "name": "nadar/stemming",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nadar/stemming.git",
+                "reference": "9f6c74ff6e3e5cc2e932864293f5d9112d9542aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nadar/stemming/zipball/9f6c74ff6e3e5cc2e932864293f5d9112d9542aa",
+                "reference": "9f6c74ff6e3e5cc2e932864293f5d9112d9542aa",
+                "shasum": ""
+            },
+            "require-dev": {
+                "luyadev/luya-testsuite": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nadar\\Stemming\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Basil Suter",
+                    "homepage": "https://github.com/nadar",
+                    "role": "Creator"
+                }
+            ],
+            "description": "Stemming by Language",
+            "homepage": "https://github.com/nadar/stemming",
+            "keywords": [
+                "php",
+                "stemmer",
+                "stemming"
+            ],
+            "support": {
+                "issues": "https://github.com/nadar/stemming/issues",
+                "source": "https://github.com/nadar/stemming/tree/1.0.3"
+            },
+            "time": "2020-12-20T08:36:03+00:00"
         },
         {
             "name": "nesbot/carbon",
