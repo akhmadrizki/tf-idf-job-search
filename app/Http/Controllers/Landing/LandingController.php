@@ -60,7 +60,27 @@ class LandingController extends Controller
         $IDFCount = self::countIDF(count($jobs), $DFCount);
         
         $TFIDFCount = self::countTFIDF($TFCount, $IDFCount);
-        dd($TFIDFCount);
+        
+        //collect highest bobot
+        $highestJobs = array();
+        foreach($TFIDFCount as $jobTerms)
+        {
+            foreach($jobTerms as $jobTerm)
+            {
+                if($jobTerm["bobot (TF-IDF)"] > 0){
+                    $highestJobs[] = $jobTerm;
+                }
+            }
+        }
+
+        //remove same job_id
+        $filteredJobs = collect($highestJobs)->unique('job_id')->values()->all();
+
+        
+        //sorted by bobot
+        $sortedJobs = collect($filteredJobs)->sortByDesc('bobot (TF-IDF)')->values()->all();
+
+        dd($sortedJobs);
         
         // return view('interfaces.landing.result')
         //     ->withJobs($jobs);
