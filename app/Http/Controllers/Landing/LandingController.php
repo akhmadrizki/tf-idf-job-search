@@ -24,6 +24,8 @@ class LandingController extends Controller
         // preprocess query
         $queryTerms = self::preprocessing($request->search);
 
+        // dd($queryTerms);
+
         //preprocess jobs
         $jobsTerms = array();
         foreach($jobs as $job)
@@ -52,14 +54,18 @@ class LandingController extends Controller
 
         //count TF
         $TFCount = self::countTF($queryTerms, $jobsTerms);
+        // dd($TFCount);
 
         //count DF
         $DFCount = self::countDF($queryTerms, $jobsTerms);
+        // dd($DFCount);
 
         //count IDF
         $IDFCount = self::countIDF(count($jobs), $DFCount);
+        // dd($IDFCount);
         
         $TFIDFCount = self::countTFIDF($TFCount, $IDFCount);
+        // dd($TFIDFCount);
         
         //collect highest bobot
         $highestJobs = array();
@@ -73,17 +79,35 @@ class LandingController extends Controller
             }
         }
 
-        //remove same job_id
-        $filteredJobs = collect($highestJobs)->unique('job_id')->values()->all();
+        // dd($highestJobs);
 
-        
         //sorted by bobot
-        $sortedJobs = collect($filteredJobs)->sortByDesc('bobot (TF-IDF)')->values()->all();
+        $sortedJobs = collect($highestJobs)->sortByDesc('bobot (TF-IDF)')->values()->all();
 
-        dd($sortedJobs);
+        // dd($sortedJobs);
+
+        //remove same job_id
+        $filteredJobs = collect($sortedJobs)->unique('job_id')->values()->all();
+
+        //ubah jadi object
+        foreach($filteredJobs as $index => $filteredJob)
+        {
+            $filteredJobs[$index] = (object) $filteredJob;
+        }
+
+        //menambahkan attribut tambahan
+        foreach($jobs as $job){
+            foreach($filteredJobs as $filteredJob){
+                if($job->id === $filteredJob->job_id){
+                    $filteredJob->job_name = $job->job_name;
+                }
+            }
+        }
+
+        dd($filteredJobs);
         
         // return view('interfaces.landing.result')
-        //     ->withJobs($jobs);
+        //     ->withJobs($filteredJobs);
     }
 
     protected static function preprocessing($sentences)
