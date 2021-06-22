@@ -28,8 +28,7 @@ class LandingController extends Controller
 
         //preprocess jobs
         $jobsTerms = array();
-        foreach($jobs as $job)
-        {
+        foreach ($jobs as $job) {
             //preprocess company name
             $companyName = self::preprocessing($job->company_name);
 
@@ -52,6 +51,7 @@ class LandingController extends Controller
             ];
         }
 
+        // dd($jobsTerms);
         //count TF
         $TFCount = self::countTF($queryTerms, $jobsTerms);
         // dd($TFCount);
@@ -63,17 +63,15 @@ class LandingController extends Controller
         //count IDF
         $IDFCount = self::countIDF(count($jobs), $DFCount);
         // dd($IDFCount);
-        
+
         $TFIDFCount = self::countTFIDF($TFCount, $IDFCount);
         // dd($TFIDFCount);
-        
+
         //collect highest bobot
         $highestJobs = array();
-        foreach($TFIDFCount as $jobTerms)
-        {
-            foreach($jobTerms as $jobTerm)
-            {
-                if($jobTerm["bobot (TF-IDF)"] > 0){
+        foreach ($TFIDFCount as $jobTerms) {
+            foreach ($jobTerms as $jobTerm) {
+                if ($jobTerm["bobot (TF-IDF)"] > 0) {
                     $highestJobs[] = $jobTerm;
                 }
             }
@@ -90,22 +88,21 @@ class LandingController extends Controller
         $filteredJobs = collect($sortedJobs)->unique('job_id')->values()->all();
 
         //ubah jadi object
-        foreach($filteredJobs as $index => $filteredJob)
-        {
+        foreach ($filteredJobs as $index => $filteredJob) {
             $filteredJobs[$index] = (object) $filteredJob;
         }
 
         //menambahkan attribut tambahan
-        foreach($jobs as $job){
-            foreach($filteredJobs as $filteredJob){
-                if($job->id === $filteredJob->job_id){
+        foreach ($jobs as $job) {
+            foreach ($filteredJobs as $filteredJob) {
+                if ($job->id === $filteredJob->job_id) {
                     $filteredJob->job_name = $job->job_name;
                 }
             }
         }
 
         dd($filteredJobs);
-        
+
         // return view('interfaces.landing.result')
         //     ->withJobs($filteredJobs);
     }
@@ -126,11 +123,10 @@ class LandingController extends Controller
 
         //lakukan stemming
         $preprocessedWord = array();
-        foreach($tempSentences as $sentence)
-        {
+        foreach ($tempSentences as $sentence) {
             $preprocessedWord[] = Stemming::get($sentence);
         }
-        
+
         return $preprocessedWord;
     }
 
@@ -139,9 +135,9 @@ class LandingController extends Controller
         $TFCount = array();
 
         //definisikan array
-        foreach($queryTerms as $queryIndex => $queryTerm){
-            foreach($jobsTerms as $jobIndex => $jobTerms){
-                foreach($jobTerms['terms'] as $jobTerm){
+        foreach ($queryTerms as $queryIndex => $queryTerm) {
+            foreach ($jobsTerms as $jobIndex => $jobTerms) {
+                foreach ($jobTerms['terms'] as $jobTerm) {
                     $TFCount[$queryIndex][$jobIndex]['job_id'] = $jobTerms['job_id'];
                     $TFCount[$queryIndex][$jobIndex]['count'] = 0;
                 }
@@ -149,16 +145,17 @@ class LandingController extends Controller
         }
 
         //lakukan pengecekan
-        foreach($queryTerms as $queryIndex => $queryTerm){
-            foreach($jobsTerms as $jobIndex => $jobTerms){
-                foreach($jobTerms['terms'] as $jobTerm){
-                    if($jobTerm === $queryTerm)
-                    {
+        foreach ($queryTerms as $queryIndex => $queryTerm) {
+            foreach ($jobsTerms as $jobIndex => $jobTerms) {
+                foreach ($jobTerms['terms'] as $jobTerm) {
+                    if ($jobTerm === $queryTerm) {
                         $TFCount[$queryIndex][$jobIndex]['count'] += 1;
                     }
                 }
             }
         }
+
+        // dd($TFCount);
 
 
         return $TFCount;
@@ -169,25 +166,26 @@ class LandingController extends Controller
         $DFCount = array();
 
         //inisialisasi array
-        foreach($queryTerms as $queryIndex => $queryTerm){
-            foreach($jobsTerms as $jobIndex => $jobTerms){
-                foreach($jobTerms['terms'] as $jobTerm){
+        foreach ($queryTerms as $queryIndex => $queryTerm) {
+            foreach ($jobsTerms as $jobIndex => $jobTerms) {
+                foreach ($jobTerms['terms'] as $jobTerm) {
                     $DFCount[$queryIndex] = 0;
                 }
             }
         }
 
         //pengecekan
-        foreach($queryTerms as $queryIndex => $queryTerm){
-            foreach($jobsTerms as $jobIndex => $jobTerms){
-                foreach($jobTerms['terms'] as $jobTerm){
-                    if($jobTerm === $queryTerm)
-                    {
+
+        foreach ($queryTerms as $queryIndex => $queryTerm) {
+            foreach ($jobsTerms as $jobIndex => $jobTerms) {
+                foreach ($jobTerms['terms'] as $jobTerm) {
+                    if ($jobTerm === $queryTerm) {
                         $DFCount[$queryIndex] += 1;
                     }
                 }
             }
         }
+
 
         return $DFCount;
     }
@@ -197,16 +195,20 @@ class LandingController extends Controller
         $IDFCount = array();
 
         //inisiasi
-        foreach($DFCount as $index => $count)
-        {
+        foreach ($DFCount as $index => $count) {
             $IDFCount[$index] = 0;
         }
 
         //hitung
-        foreach($DFCount as $index => $count)
-        {
-            if($count > 0)
-                $IDFCount[$index] = log($jobsCount/$count);
+        foreach ($DFCount as $index => $count) {
+            if ($count > 0) {
+                if ($count > $jobsCount) {
+                    $count = $count - 2;
+                } elseif ($count == $jobsCount) {
+                    $count = $count - 1;
+                }
+                $IDFCount[$index] = log($jobsCount / $count);
+            }
         }
 
         return $IDFCount;
@@ -217,10 +219,8 @@ class LandingController extends Controller
         $TFIDFCount = array();
 
         //inisiasi
-        foreach($TFCount as $index => $TFJobs)
-        {       
-            foreach($TFJobs as $jobIndex => $TFJob)
-            {
+        foreach ($TFCount as $index => $TFJobs) {
+            foreach ($TFJobs as $jobIndex => $TFJob) {
                 $TFIDFCount[$index][$jobIndex] = [
                     'job_id' => $TFJob['job_id'],
                     'tf_count' => $TFJob['count'],
@@ -231,10 +231,8 @@ class LandingController extends Controller
 
 
         //hitung
-        foreach($TFCount as $index => $TFJobs)
-        {       
-            foreach($TFJobs as $jobIndex => $TFJob)
-            {
+        foreach ($TFCount as $index => $TFJobs) {
+            foreach ($TFJobs as $jobIndex => $TFJob) {
                 $TFIDFCount[$index][$jobIndex]['bobot (TF-IDF)'] = $TFIDFCount[$index][$jobIndex]['tf_count'] * $IDFCount[$index];
             }
         }
