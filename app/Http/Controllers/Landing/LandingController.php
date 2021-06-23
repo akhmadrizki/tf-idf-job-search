@@ -96,15 +96,18 @@ class LandingController extends Controller
         foreach ($jobs as $job) {
             foreach ($filteredJobs as $filteredJob) {
                 if ($job->id === $filteredJob->job_id) {
-                    $filteredJob->job_name = $job->job_name;
+                    $filteredJob->company_name = $job->company_name;
+                    $filteredJob->job_name     = $job->job_name;
+                    $filteredJob->address      = $job->address;
+                    $filteredJob->category     = $job->category;
+                    $filteredJob->description  = $job->description;
                 }
             }
         }
 
-        dd($filteredJobs);
+        // dd($filteredJobs);
 
-        // return view('interfaces.landing.result')
-        //     ->withJobs($filteredJobs);
+        return view('interfaces.landing.result', compact('filteredJobs'));
     }
 
     protected static function preprocessing($sentences)

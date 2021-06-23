@@ -68,12 +68,12 @@
 </div>
 <div class="container">
   <div class="result-content py-4">
-    @if (count($jobs) == 0)
+    @if (empty($filteredJobs))
     <h2>Sorry we couldn't find what you were looking for</h2>
     @else
     <p>About 128 results</p>
 
-    @foreach ($jobs as $job)
+    @foreach ($filteredJobs as $job)
     <div class="card-result my-2">
       <h1>{{ $job->job_name }}</h1>
       <p class="card-result-company"><i class="far fa-building"></i> {{ $job->company_name }}</p>
@@ -85,11 +85,6 @@
     </div>
     @endforeach
     @endif
-  </div>
-  <div class="py-4">
-    <ul class="pagination justify-content-end mb-0">
-      {{ $jobs->links('vendor.pagination.bootstrap-4') }}
-    </ul>
   </div>
 </div>
 <div class="footers text-center">

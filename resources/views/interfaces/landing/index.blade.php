@@ -37,9 +37,9 @@
         <form action="{{ route('index.result') }}" method="POST">
           @csrf
           <div class="input-group search-custom">
-            <input type="text" name="search" class="form-control input-custom" placeholder="Search and find the job you want"
-              autofocus>
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+            <input type="text" name="search" class="form-control input-custom"
+              placeholder="Search and find the job you want" autofocus>
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
                 class="fas fa-search"></i></button>
           </div>
         </form>
