@@ -16,6 +16,7 @@
 
   .input-custom {
     border-radius: 24px;
+    border-right: none;
   }
 
   .result-content {
@@ -36,6 +37,16 @@
     font-size: 18px;
   }
 
+  .btn-custom {
+    border-color: #ced4da;
+    border-left: none;
+    border-radius: 0 24px 24px 0;
+  }
+
+  .form-control:focus {
+    border-color: #ced4da;
+  }
+
   .footers {
     background-color: #f2f2f2;
     color: rgba(0, 0, 0, .54);
@@ -54,11 +65,12 @@
         <a href="/"><img src="{{ asset('argon/img/brand/alihgae-logo.png') }}" alt="alihgae-logo"></a>
       </div>
       <div class="col-8">
-        <form action="">
+        <form action="{{ route('index.result') }}" method="POST">
+          @csrf
           <div class="input-group search-custom">
-            <input type="text" class="form-control input-custom" placeholder="Search and find the job you want"
-              autofocus>
-            <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i
+            <input type="text" name="search" class="form-control shadow-none input-custom"
+              placeholder="Search and find the job you want" autofocus>
+            <button class="btn btn-outline-secondary btn-custom" type="submit" id="button-addon2"><i
                 class="fas fa-search"></i></button>
           </div>
         </form>
@@ -71,7 +83,7 @@
     @if (empty($filteredJobs))
     <h2>Sorry we couldn't find what you were looking for</h2>
     @else
-    <p>About 128 results</p>
+    <p>{{count($filteredJobs)}} results</p>
 
     @foreach ($filteredJobs as $job)
     <div class="card-result my-2">

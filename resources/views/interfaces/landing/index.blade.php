@@ -17,6 +17,17 @@
 
   .input-custom {
     border-radius: 24px;
+    border-right: none;
+  }
+
+  .form-control:focus {
+    border-color: #ced4da;
+  }
+
+  .btn-custom {
+    border-color: #ced4da;
+    border-left: none;
+    border-radius: 0 24px 24px 0;
   }
 
   .footer {
@@ -37,9 +48,9 @@
         <form action="{{ route('index.result') }}" method="POST">
           @csrf
           <div class="input-group search-custom">
-            <input type="text" name="search" class="form-control input-custom"
+            <input type="text" name="search" class="form-control shadow-none input-custom"
               placeholder="Search and find the job you want" autofocus>
-            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i
+            <button class="btn btn-outline-secondary btn-custom" type="submit" id="button-addon2"><i
                 class="fas fa-search"></i></button>
           </div>
         </form>
