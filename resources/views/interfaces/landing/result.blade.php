@@ -24,6 +24,7 @@
   }
 
   .card-result {
+    border-bottom: 1px solid #ebebeb;
     padding: 4px 0;
     width: 100%;
   }
@@ -53,6 +54,10 @@
     font-weight: 700;
     padding: 4px 0;
     width: 100%;
+  }
+
+  .text-red {
+    color: #E67E22;
   }
 </style>
 @endsection
@@ -86,7 +91,9 @@
     <p>{{count($filteredJobs)}} results</p>
 
     @foreach ($filteredJobs as $job)
-    <div class="card-result my-2">
+    <div class="card-result my-4">
+      <small class="text-red"><i class="fas fa-balance-scale"></i> Bobot:
+        {{ round($job->{'bobot (TF-IDF)'}, 2, PHP_ROUND_HALF_UP) }}</small>
       <h1>{{ $job->job_name }}</h1>
       <p class="card-result-company"><i class="far fa-building"></i> {{ $job->company_name }}</p>
       <p>
